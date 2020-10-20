@@ -7,14 +7,22 @@ set shiftwidth=4
 set clipboard+=unnamed
 set backspace=2
 set scrolloff=3
-syntax on
-set guifont=Menlo\ Regular:h14
+set guifont=Menlo\ Regular:h16
+set smartindent
 
 "默认打开文档树
 "autocmd vimenter * NERDTre
 
 "配色
+"--------------------------
+"底部任务栏
+let g:onedark_termcolors=256
+let g:lightline = {
+  \ 'colorscheme': 'onedark',
+  \ }
+syntax on
 colorscheme onedark
+"--------------------------
 
 "打开文件类型检测
 set completeopt=longest,menu
@@ -23,72 +31,49 @@ set completeopt=longest,menu
 "=======================
 "python使用路径
 let g:ycm_path_to_python_interpreter='/usr/local/Cellar/python@3.8/3.8.6/bin/python3' 
+let g:ycm_add_preview_to_completeopt = 0
 "自动开启语义补全
-let g:ycm_seed_identifiers_with_syntax = 1
+"let g:ycm_seed_identifiers_with_syntax = 1
 "在注释中也开启补全
 let g:ycm_complete_in_comments = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 0
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+"关闭语法检查
+let g:ycm_show_diagnostics_ui = 0
+"Ctrl+z补全
+let g:ycm_key_invoke_completion = '<c-z>'
 "字符串中也开启补全
 let g:ycm_complete_in_strings = 1
 "let g:ycm_collect_identifiers_from_tags_files = 1
 "自动补全优化
+let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_semantic_triggers =  {
 			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
 			\ 'cs,lua,javascript': ['re!\w{2}'],
 			\ }
 
+"白名单
+let g:ycm_filetype_whitelist = { 
+			\ "c":1,
+			\ "cpp":1, 
+			\ "objc":1,
+			\ "sh":1,
+			\ "zsh":1,
+			\ "zimbu":1,
+			\ }
 "========================
 
 "括号补全
 "========================
-inoremap ( ()<LEFT>
-inoremap [ []<LEFT>
-inoremap { {}<LEFT>
-inoremap " ""<LEFT>
-inoremap ' ''<LEFT>
-inoremap < <><LEFT>
+"自动配对符号
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 
-function! RemovePairs()
-    let s:line = getline(".")
-    let s:previous_char = s:line[col(".")-1]
+"回车缩进并自动换行，默认1
+let g:AutoPairsMapCR = 1
+"两端添加括号
+let g:AutoPairsMapSpace = 1
 
-    if index(["(","[","{"],s:previous_char) != -1
-        let l:original_pos = getpos(".")
-        execute "normal %"
-        let l:new_pos = getpos(".")
-        " only right (
-        if l:original_pos == l:new_pos
-            execute "normal! a\<BS>"
-            return
-        end
 
-        let l:line2 = getline(".")
-        if len(l:line2) == col(".")
-            execute "normal! v%xa"
-        else
-            execute "normal! v%xi"
-        end
-    else
-        execute "normal! a\<BS>"
-    end
-endfunction
-
-function! RemoveNextDoubleChar(char)
-    let l:line = getline(".")
-    let l:next_char = l:line[col(".")]
-
-    if a:char == l:next_char
-        execute "normal! l"
-    else
-        execute "normal! i" . a:char . ""
-    end
-endfunction
-
-inoremap <BS> <ESC>:call RemovePairs()<CR>a
-inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
-inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
-inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-inoremap > <ESC>:call RemoveNextDoubleChar('>')<CR>a
+"
 "========================
 
 
@@ -126,6 +111,39 @@ endfunc
 "========================
 
 
+"模板、头文件补全
+"新建.cpp 自动插入头文件
+"===============================
+autocmd BufNewFile *.cpp exec ":call Setcpp()" 
+func Setcpp()
+	call setline(1, "/*************************************************************************") 
+	call append(line("."), "	> File Name: ".expand("%")) 
+	call append(line(".")+1, "	> Author: Tisen") 
+	call append(line(".")+2, "	> Mail: 1600037849@qq.com") 
+	call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
+	call append(line(".")+4, " ************************************************************************/") 
+	call append(line(".")+5, "")
+	call append(line(".")+6, "#include<bits/stdc++.h>")
+	call append(line(".")+7, "using namespace std;")
+	call append(line(".")+8, "#define ll long long")
+	call append(line(".")+9, "#define rep(i,n) for(int i = 0; i < int(n); i++)")
+	call append(line(".")+10, "#define rep2(i,st,ed) for(int i = int(st); i <= int(ed); i++)")
+	call append(line(".")+11, "const ll N = 2e5 + 200;")
+	call append(line(".")+12, "const ll INF = 0x3f3f3f3f;")
+	call append(line(".")+13, "const ll mod = 1e9 + 7;")
+	call append(line(".")+14, "")
+	call append(line(".")+15, "")
+	call append(line(".")+16, "int main()")
+	call append(line(".")+17, "{")
+	call append(line(".")+18, '	/*freopen("in.txt","r",stdin);*/')
+	call append(line(".")+19, '	/*freopen("out.txt","w",stdout);*/')
+	call append(line(".")+20, "")
+	call append(line(".")+21, "")
+	call append(line(".")+22, "	return 0;")
+	call append(line(".")+23, "}")
+endfunc
+"================================
+
 
 
 "vundle 配置
@@ -147,6 +165,9 @@ Plugin 'preservim/nerdtree'
 "括号配对
 Plugin 'tpope/vim-surround'
 
+"括号补全
+Plugin 'jiangmiao/auto-pairs'
+
 
 "注释
 Plugin 'tpope/vim-commentary'
@@ -155,7 +176,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'VundleVim/Vundle.vim'
 
 "括号、引号,等符号添加修改删除
-Plugin 'tpope/vim-surround'
+""Plugin 'tpope/vim-surround'
 
 "YouCompleteMe 自动补全
 Plugin 'Valloric/YouCompleteMe',{'do':'python3 install.py --clang-completer'} 
@@ -164,5 +185,4 @@ Plugin 'Valloric/YouCompleteMe',{'do':'python3 install.py --clang-completer'}
 "Plugins End
 call vundle#end()
 filetype plugin indent on
-"=========================================================
-
+"
