@@ -10,8 +10,41 @@ set scrolloff=3
 set guifont=Menlo\ Regular:h16
 set smartindent
 
-"默认打开文档树
-"autocmd vimenter * NERDTre
+"nerdtree配置
+"==============================
+map <F2> :NERDTreeMirror<CR>
+map <F2> :NERDTreeToggle<CR>
+"==============================
+
+
+
+"彩色括号配置
+"======================================
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesLoadRound
+au VimEnter * RainbowParenthesesLoadSquare
+au VimEnter * RainbowParenthesesLoadBraces
+au VimEnter * RainbowParenthesesToggle
+"=======================================
+
 
 "配色
 "--------------------------
@@ -156,6 +189,9 @@ endif
 call vundle#begin()
 "Plugins Start
 
+"多色括号
+Plugin 'kien/rainbow_parentheses.vim'
+
 "底部增强
 Plugin 'vim-airline/vim-airline'
 
@@ -167,6 +203,9 @@ Plugin 'tpope/vim-surround'
 
 "括号补全
 Plugin 'jiangmiao/auto-pairs'
+
+"扩展语言包
+Plugin 'sheerun/vim-polyglot'
 
 
 "注释
@@ -185,4 +224,5 @@ Plugin 'Valloric/YouCompleteMe',{'do':'python3 install.py --clang-completer'}
 "Plugins End
 call vundle#end()
 filetype plugin indent on
-"
+"=========================================================
+
