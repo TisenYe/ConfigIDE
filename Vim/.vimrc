@@ -9,6 +9,9 @@ set backspace=2
 set scrolloff=3
 set guifont=Menlo\ Regular:h16
 set smartindent
+set encoding=utf8
+
+inoremap jj <esc>
 
 "nerdtree配置
 "==============================
@@ -16,6 +19,12 @@ map <F2> :NERDTreeMirror<CR>
 map <F2> :NERDTreeToggle<CR>
 "==============================
 
+
+"按键映射
+"================================
+nmap <Enter> o<Esc>k
+nmap <S-Enter> O<Esc>k
+"================================
 
 
 "彩色括号配置
@@ -45,6 +54,20 @@ au VimEnter * RainbowParenthesesLoadBraces
 au VimEnter * RainbowParenthesesToggle
 "=======================================
 
+"Syntastic语法检查配置
+"=====================================
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+
+"=====================================
+
+
 
 "配色
 "--------------------------
@@ -63,20 +86,24 @@ set completeopt=longest,menu
 "ycm配置
 "=======================
 "python使用路径
-let g:ycm_path_to_python_interpreter='/usr/local/Cellar/python@3.8/3.8.6/bin/python3' 
+let g:ycm_path_to_python_interpreter='/usr/local/Cellar/python@3.8/3.8.6_2/bin/python3' 
 let g:ycm_add_preview_to_completeopt = 0
 "自动开启语义补全
-"let g:ycm_seed_identifiers_with_syntax = 1
+" let g:ycm_seed_identifiers_with_syntax = 1
 "在注释中也开启补全
-let g:ycm_complete_in_comments = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" let g:ycm_complete_in_comments = 1
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1
 "关闭语法检查
 let g:ycm_show_diagnostics_ui = 0
 "Ctrl+z补全
-let g:ycm_key_invoke_completion = '<c-z>'
+" let g:ycm_key_invoke_completion = '<c-z>'
+"语法关键字补全
+let g:ycm_seed_identifiers_with_syntax = 1
 "字符串中也开启补全
-let g:ycm_complete_in_strings = 1
-"let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:ycm_complete_in_strings = 1
+" let g:ycm_collect_identifiers_from_tags_files = 1
+" 在字符串输入中也能补全
+" let g:ycm_complete_in_strings = 1
 "自动补全优化
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_semantic_triggers =  {
@@ -104,10 +131,14 @@ let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 let g:AutoPairsMapCR = 1
 "两端添加括号
 let g:AutoPairsMapSpace = 1
-
-
-"
 "========================
+
+
+"emmet html补全
+"=======================================
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+"=======================================
 
 
 
@@ -129,7 +160,7 @@ func! CompileRunGcc()
 	elseif &filetype == 'sh'
 		:!time bash %
 	elseif &filetype == 'python'
-		exec "!time python2.7 %"
+		exec "!time python3.7 %"
     elseif &filetype == 'html'
         exec "!firefox % &"
     elseif &filetype == 'go'
@@ -189,6 +220,9 @@ endif
 call vundle#begin()
 "Plugins Start
 
+"html补全插件
+Plugin 'mattn/emmet-vim'
+
 "多色括号
 Plugin 'kien/rainbow_parentheses.vim'
 
@@ -206,6 +240,9 @@ Plugin 'jiangmiao/auto-pairs'
 
 "扩展语言包
 Plugin 'sheerun/vim-polyglot'
+
+"语法检查
+" Plugin 'vim-syntastic/syntastic'
 
 
 "注释
@@ -225,4 +262,3 @@ Plugin 'Valloric/YouCompleteMe',{'do':'python3 install.py --clang-completer'}
 call vundle#end()
 filetype plugin indent on
 "=========================================================
-
