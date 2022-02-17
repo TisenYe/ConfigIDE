@@ -27,6 +27,17 @@ nmap <S-Enter> O<Esc>k
 "================================
 
 
+"cscope
+"==============================
+"添加默认cscope.out
+":cs add /root/work/cscope.out
+"设置默认cscope的位置
+":set csprg=/usr/share/cscope
+:set cscopequickfix=s-,c-,d-,i-,t-,e-,a-,g-
+:set csto=1
+
+
+
 "彩色括号配置
 "======================================
 let g:rbpt_colorpairs = [
@@ -52,6 +63,7 @@ au VimEnter * RainbowParenthesesLoadRound
 au VimEnter * RainbowParenthesesLoadSquare
 au VimEnter * RainbowParenthesesLoadBraces
 au VimEnter * RainbowParenthesesToggle
+au VimEnter * RainbowParenthesesLoadChevrons
 "=======================================
 
 "Syntastic语法检查配置
